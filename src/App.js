@@ -1,11 +1,12 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import './App.css';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import Users from './Components/users/Users'
 import Navbar from './Components/layouts/Navbar'
 import Search from './Components/users/Search'
 import axios from 'axios'
 import Alert from './Components/layouts/Alert'
-
+import about from './Components/pages/about'
 
 class App extends Component {
 	state = {
@@ -39,19 +40,28 @@ class App extends Component {
 	render() {
 		const { users, loading } = this.state
 		return (
-			<div className="App">
-				<Navbar />
-				<div className="container">
-					<Alert alert={this.state.alert} />
-					<Search
-						searchUsers={this.searchUsers}
-						clearUsers={this.clearUsers}
-						showClear={users.length > 0 ? true : false}
-						setAlert={this.setAlert}
-					/>
-					<Users loading={loading} users={users} />
+			<Router>
+				<div className="App">
+					<Navbar />
+					<div className="container">
+						<Alert alert={this.state.alert} />
+						<Switch>
+							<Route exact path='/' render={props => (
+								<Fragment>
+									<Search
+										searchUsers={this.searchUsers}
+										clearUsers={this.clearUsers}
+										showClear={users.length > 0 ? true : false}
+										setAlert={this.setAlert}
+									/>
+									<Users loading={loading} users={users} />
+								</Fragment>
+							)}></Route>
+							<Route exact path='/about' component={about} />
+						</Switch>
+					</div>
 				</div>
-			</div>
+			</Router>
 		);
 	}
 }
